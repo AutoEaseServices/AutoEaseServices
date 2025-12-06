@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoEase Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #e8e8e8;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Navigation Bar */
+        nav {
+            background-color: rgba(40, 40, 40, 0.95);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav h1 {
+            color: white;
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        .schedule-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .schedule-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(40, 40, 40, 0.65), rgba(40, 40, 40, 0.65)),
+                        url('images/generated_image.png');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        
+        .hero h2 {
+            color: white;
+            font-size: 56px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            max-width: 1000px;
+        }
+        
+        .hero p {
+            color: white;
+            font-size: 26px;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto 50px;
+            font-weight: 300;
+        }
+        
+        .schedule-btn {
+            background: white;
+            color: #333;
+            padding: 18px 65px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 500;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .schedule-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* SERVICE SECTION STYLES */
+        .service-section {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #e8e8e8;
+        }
+        
+        .service-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .service-tab {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .service-tab-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 25px;
+            text-align: center;
+            border: 3px solid #2c3e50;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            line-height: 1.2;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .service-tab:hover .service-tab-header {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+        }
+        
+        .service-tab.active .service-tab-header {
+            background: white;
+            color: #2c3e50;
+            border-color: #2c3e50;
+        }
+        
+        .service-tab-image {
+            width: 100%;
+            height: 160px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            margin-bottom: 12px;
+        }
+        
+        .service-tab-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .service-tab-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            text-align: center;
+            padding: 0 5px;
+        }
+        
+        .service-content {
+            display: none;
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            min-height: 250px;
+        }
+        
+        .service-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .content-title {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .service-list li {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .service-list li:before {
+            content: "✓";
+            color: #ff6b35;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        /* HOW IT WORKS & CONTACT SECTION */
+        .how-it-works-section {
+            background: #e8e8e8;
+            padding: 40px 20px;
+        }
+
+        .how-it-works-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .how-it-works-left {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .how-it-works-header {
+            background: #3d5a6c;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 400;
+        }
+
+        .step-item {
+            padding: 30px;
+            border-bottom: 3px solid #3d5a6c;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-badge {
+            background: #3d5a6c;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            white-space: nowrap;
+            font-size: 16px;
+        }
+
+        .step-icon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .step-content h3 {
+            color: #3d5a6c;
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 17px;
+        }
+
+        /* CONTACT FORM */
+        .contact-form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3d5a6c;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #3d5a6c;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2c4454;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(61, 90, 108, 0.3);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #e8e8e8;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left h2 {
+            font-size: 28px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-right h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .footer-right p {
+            color: #666;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .service-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .service-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .how-it-works-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav h1 {
+                font-size: 18px;
+            }
+            
+            .schedule-link {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            
+            .hero {
+                margin-top: 55px;
+                padding: 40px 20px;
+                height: 80vh;
+            }
+            
+            .hero h2 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 20px;
+            }
+            
+            .schedule-btn {
+                padding: 14px 40px;
+                font-size: 16px;
+            }
+            
+            .service-tabs {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-tab-header {
+                font-size: 12px;
+                padding: 8px 10px;
+                min-height: 36px;
+            }
+            
+            .service-tab-description {
+                font-size: 14px;
+            }
+
+            .service-list li {
+                font-size: 14px;
+            }
+
+            .how-it-works-header {
+                font-size: 24px;
+                padding: 20px;
+            }
+
+            .step-badge {
+                font-size: 14px;
+            }
+
+            .step-content p {
+                font-size: 15px;
+            }
+
+            .step-item {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group label {
+                font-size: 14px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                font-size: 16px;
+            }
+
+            .contact-form-container {
+                padding: 25px;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                padding: 40px 20px;
+            }
+
+            .footer-right {
+                text-align: center;
+            }
+
+            .footer-right p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <h1>AutoEase Services</h1>
+        <a href="#contact-form" class="schedule-link">Schedule</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Your time is valuable. We'll come to You!</h2>
+        <p>From oil changes to brake service, tire rotations to full detailing, we bring expert automotive care directly to your home or office. No waiting rooms. No wasted time. Just quality service at your convenience.</p>
+        <a href="#contact-form" class="schedule-btn">Schedule Now!</a>
+    </section>
+
+    <!-- Service Section -->
+    <div class="service-section">
+        <div class="service-tabs">
+            <div class="service-tab active" onclick="showTab('maintenance')">
+                <div class="service-tab-header">
+                    Oil Change And Maintenance
+                </div>
+                <div class="service-tab-image">
+                    <img src="https://falcon-rose-ml4a.squarespace.com/s/oil-change-explained-lm6d.jpg" alt="Oil Change Service">
+                </div>
+                <div class="service-tab-description">
+                    Complete oil and filter service with multi-point inspection. Fluids topped off and service light reset.
+                </div>
+            </div>
+            
+            <div class="service-tab" onclick="showTab('detailing')">
+                <div class="service-tab-header">
+                    Interior/Exterior Detailing
+                </div>
+                <div class="service-tab-image">
+                    <img src="https://falcon-rose-ml4a.squarespace.com/s/detailing.webp" alt="Car Detailing Service">
+                </div>
+                <div class="service-tab-description">
+                    Professional interior and exterior detailing including wash, wax, polish, and headlight restoration.
+                </div>
+            </div>
+            
+            <div class="service-tab" onclick="showTab('tires')">
+                <div class="service-tab-header">
+                    Tire Services & Rotation
+                </div>
+                <div class="service-tab-image">
+                    <img src="https://falcon-rose-ml4a.squarespace.com/s/tire-change-5ebk.jpg" alt="Tire Service">
+                </div>
+                <div class="service-tab-description">
+                    Installation, balancing, rotation, pressure checks, and seasonal swaps.
+                </div>
+            </div>
+            
+            <div class="service-tab" onclick="showTab('brake')">
+                <div class="service-tab-header">
+                    Brake and Battery Service
+                </div>
+                <div class="service-tab-image">
+                    <img src="https://falcon-rose-ml4a.squarespace.com/s/front-brake-repair-1200x900-bz4a.jpg" alt="Brake Service">
+                </div>
+                <div class="service-tab-description">
+                    Complete brake inspection, pad replacement, fluid testing, and battery service.
+                </div>
+            </div>
+        </div>
+        
+        <div id="maintenance" class="service-content active">
+            <div class="content-title">Oil Change And Preventive Maintenance Service Includes</div>
+            <ul class="service-list">
+                <li>Full synthetic oil change</li>
+                <li>Premium oil filter replacement</li>
+                <li>Air filter inspection</li>
+                <li>Engine diagnostics check</li>
+                <li>Replacement of oil filter</li>
+                <li>Replacement of air filter</li>
+                <li>Top up of wiper fluid</li>
+                <li>Brake fluid top up</li>
+                <li>Coolant top up</li>
+                <li>AC disinfection & interior sanitization</li>
+                <li>Interior vacuuming (including dashboard shinning)</li>
+                <li>Waterless car wash (dry wash)</li>
+                <li>Engine bay cleaning</li>
+                <li>Spark plug check</li>
+                <li>Replacement of AC filter</li>
+                <li>Complete system diagnostics with electrical check</li>
+            </ul>
+        </div>
+        
+        <div id="detailing" class="service-content">
+            <div class="content-title">Interior/Exterior Detailing & Polishing Service Includes</div>
+            <ul class="service-list">
+                <li>Professional interior detailing</li>
+                <li>Vacuum and steam clean</li>
+                <li>Wipe-down & protectants</li>
+                <li>Exterior service wash, polish, wax</li>
+                <li>Headlight restoration</li>
+                <li>Dashboard shinning</li>
+                <li>Door jamb cleaning</li>
+                <li>Interior sanitization</li>
+                <li>Window cleaning inside & out</li>
+            </ul>
+        </div>
+        
+        <div id="tires" class="service-content">
+            <div class="content-title">Tire Services & Rotation Includes</div>
+            <ul class="service-list">
+                <li>Tire installation</li>
+                <li>Tire balancing</li>
+                <li>Tire rotation</li>
+                <li>Pressure checks</li>
+                <li>Seasonal tire swaps</li>
+                <li>Wheel alignment check</li>
+                <li>Tire pressure monitoring</li>
+                <li>Flat tire repair</li>
+            </ul>
+        </div>
+        
+        <div id="brake" class="service-content">
+            <div class="content-title">Brake and Battery Service Includes</div>
+            <ul class="service-list">
+                <li>Complete brake service</li>
+                <li>Brake pad and rotor inspection</li>
+                <li>Brake fluid testing and replacement</li>
+                <li>Battery testing</li>
+                <li>Battery replacement</li>
+                <li>Terminal cleaning</li>
+                <li>Charging system check</li>
+                <li>Brake performance evaluation</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- How It Works & Contact Section -->
+    <section class="how-it-works-section" id="contact-form">
+        <div class="how-it-works-container">
+            <!-- Left Side: How It Works -->
+            <div class="how-it-works-left">
+                <div class="how-it-works-header">
+                    How Does It Work?
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-badge">Step 1</div>
+                    <div class="step-content">
+                        <h3>📋 Choose Your Service</h3>
+                        <p>Share what services you're looking for, and we'll work with you to find the right solution at a competitive price. Leave us a detailed message, and we'll get back to you within 24 hours.</p>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-badge">Step 2</div>
+                    <div class="step-content">
+                        <h3>📅 Schedule Your Service</h3>
+                        <p>We'll reach out to you to discuss your needs and schedule a date and time that works best for you. We'll ensure we have everything ready to provide the service your vehicle needs.</p>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-badge">Step 3</div>
+                    <div class="step-content">
+                        <h3>📍 We Come to You</h3>
+                        <p>Our mobile mechanic arrives at your location of choice - home, office, or anywhere convenient, fully equipped to complete all your vehicle services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Contact Form -->
+            <div class="contact-form-container">
+                <form action="https://formsubmit.co/shahidulmahmood@gmail.com" method="POST">
+                    <div class="form-group">
+                        <label>Name (required)</label>
+                        <div class="form-row">
+                            <input type="text" name="first_name" placeholder="First Name" required>
+                            <input type="text" name="last_name" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email (required)</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="5"></textarea>
+                    </div>
+                    
+                    <!-- Hidden fields for FormSubmit configuration -->
+                    <input type="hidden" name="_subject" value="New Contact Form Submission - AutoEase Services">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="text" name="_honey" style="display:none">
+                    
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <h2>AutoEase Services</h2>
+        </div>
+        <div class="footer-right">
+            <h3>Contact</h3>
+            <p>contact@autoeaseservices.net</p>
+            <p>(857) 498-4623</p>
+        </div>
+    </footer>
+
+    <script>
+    function showTab(tabId) {
+        // Hide all content
+        document.querySelectorAll('.service-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        // Remove active from all tabs
+        document.querySelectorAll('.service-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        // Show selected content
+        document.getElementById(tabId).classList.add('active');
+        // Add active to clicked tab
+        event.currentTarget.classList.add('active');
+    }
+    </script>
+</body>
+</html>
